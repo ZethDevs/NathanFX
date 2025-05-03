@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel - NathanFX Signal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 20px; }
+    h1 { color: #333; }
+    .cards { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .card { background: #fff; flex: 1; min-width: 200px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; align-items: center; }
+    .card i { font-size: 2.5em; margin-right: 15px; color: #4e73df; }
+    .card-content { }
+    .card-title { font-size: 1em; margin: 0; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+    .card-value { font-size: 1.8em; margin: 5px 0 0 0; color: #111; }
+    .card-small { font-size: 0.9em; color: #555; }
+    .online { color: #28a745; }
+    .offline { color: #dc3545; }
+    .info-cards { margin-top: 30px; display: flex; gap: 20px; flex-wrap: wrap; }
+    .info-card { background: #fff; flex: 1; min-width: 250px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .info-card h3 { margin-top: 0; font-size: 1.1em; color: #333; }
+    .info-card p { margin: 5px 0; font-size: 0.95em; color: #555; }
+    .info-card a { color: #4e73df; text-decoration: none; }
+    .table-container { margin-top: 30px; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); max-height: 400px; overflow-y: auto; }
+    .table-container table { width: 100%; border-collapse: collapse; }
+    .table-container th, .table-container td { padding: 12px; border: 1px solid #eaeaea; text-align: left; }
+    .table-container th { background: #f7f7f7; position: sticky; top: 0; }
+    .table-container tbody tr:nth-child(odd) { background: #fafafa; }
+  </style>
+</head>
+<body>
+  <h1>Panel - NathanFX Signal</h1>
+  <div class="cards">
+    <div class="card">
+      <i class="fa fa-server"></i>
+      <div class="card-content">
+        <p class="card-title"><b>Bot Status</b></p>
+        <p id="status" class="card-value offline">Loading...</p>
+      </div>
+    </div>
+    <div class="card">
+      <i class="fa fa-clock"></i>
+      <div class="card-content">
+        <p class="card-title"><b>Uptime</b></p>
+        <p class="card-value">{{ uptime }}</p>
+      </div>
+    </div>
+    <div class="card">
+      <i class="fa fa-users"></i>
+      <div class="card-content">
+        <p class="card-title"><b>Total Users</b></p>
+        <p class="card-value">{{ total }}</p>
+        <p class="card-small">Updated just now</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-cards">
+    <div class="info-card">
+      <h3><i class="fa fa-robot"></i> Bot Info</h3>
+      <p><strong>Bot :</strong> <a href="https://t.me/{{ bot_username }}">@{{ bot_username }}</a></p>
+      <p><strong>Channel :</strong> <a href="https://t.me/{{ channel_username }}">@{{ channel_username }}</a></p>
+      <p><strong>Developer :</strong> <a href="https://t.me/{{ developer_username }}">@{{ developer_username }}</a></p>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <h2>User List</h2>
+    <table>
+      <thead>
+        <tr><th>No</th><th>ID</th><th>Full Name</th></tr>
+      </thead>
+      <tbody>
+        {% for uid, name in users.items() %}
+          <tr><td>{{ loop.index }}</td><td>{{ uid }}</td><td>{{ name }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Fetch bot status
+    fetch('/status')
+      .then(response => response.json())
+      .then(data => {
+        const statusEl = document.getElementById('status');
+        if (data.status === 'Online') {
+          statusEl.textContent = 'ONLINE';
+          statusEl.classList.remove('offline');
+          statusEl.classList.add('online');
+        } else {
+          statusEl.textContent = 'OFFLINE';
+          statusEl.classList.remove('online');
+          statusEl.classList.add('offline');
+        }
+      })
+      .catch(() => {
+        const statusEl = document.getElementById('status');
+        statusEl.textContent = 'Error';
+        statusEl.classList.remove('online');
+        statusEl.classList.add('offline');
+      });
+  </script>
+</body>
+</html>
