@@ -5,7 +5,7 @@ import time
 import threading
 
 # --- CONFIG ---
-TOKEN = "7829287573:AAG7WTzEiFkFBSLvKtxRhuXGJJoJnI5XzUw"
+TOKEN = "7829287573:AAEZYDRFbyM9MMrFRjCmmZ_p2lZbOD7NzvM"
 ADMIN_ID = 5937612986
 USER_INFO_FILE = "user_info.txt"
 CHANNEL_USERNAME = "@NathanFX_Signal"
